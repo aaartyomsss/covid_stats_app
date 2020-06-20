@@ -36,12 +36,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Covid Statistics', style: TextStyle(fontFamily: 'Muli'),),
-          centerTitle: true,
-        ),
-        body: buildFuture(globalObject));
+    return buildFuture(globalObject);
   }
 }
 
