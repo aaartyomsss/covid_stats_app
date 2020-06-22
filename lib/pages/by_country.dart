@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:covid_stats_app/models/by_country_model.dart';
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 class ByCountry extends StatefulWidget {
   @override
   _ByCountryState createState() => _ByCountryState();
@@ -53,6 +55,7 @@ class _ByCountryState extends State<ByCountry> {
     return Column(
       children: <Widget>[
         Expanded(
+          flex: 1,
           child: TextFormField(
             onFieldSubmitted: (String value) {
               setState(() {
@@ -66,19 +69,57 @@ class _ByCountryState extends State<ByCountry> {
             builder: (context, data) {
               if (data.hasData && data.connectionState == ConnectionState.done) {
                 var dataObject = data.data;
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: dataObject.length,
-                itemBuilder: (context, index) {
-                  return Text('${dataObject[index].confirmed}');
-                }
-                );
+              return Expanded(
+                flex: 8,
+                              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: dataObject.length,
+                  itemBuilder: (context, index) {
+                    return displayInfo(con: dataObject[index].confirmed,
+                    recovered: dataObject[index].recovered,
+                    active: dataObject[index].active,
+                    deaths: dataObject[index].deaths,
+                    date: dataObject[index].date,
+                    );
+                  }
+                  ),
+              );
               } else if (data.hasError) {
-                return Text('Unable to receive data. Please check spelling of a country');
+                return Center(child: Text('Unable to receive data. Please check spelling of a country'));
               }
               return CircularProgressIndicator();
             }),
       ],
     );
   }
+
+  Widget displayInfo({con, recovered, deaths, active, date}) {
+    return Card(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Column(
+            children: [
+              Text('Confirmed', style: cardText,),
+              Text('Recovered', style: cardText,),
+              Text('Active', style: cardText,),
+              Text('Deaths', style: cardText,),
+              Text('Date', style: cardText,),
+            ]
+          ),
+          Column(
+            children: [
+              Text(con.toString(), style: cardText,),
+              Text(recovered.toString(), style: cardText,),
+              Text(active.toString(), style: cardText,),
+              Text(deaths.toString(), style: cardText,),
+              Text(DateFormat("dd-MM-yyyy").format(date), style: cardText,),
+            ]
+          ),
+
+        ],
+      )
+    );
+  }
+
 }

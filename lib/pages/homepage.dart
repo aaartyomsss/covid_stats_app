@@ -68,9 +68,9 @@ Widget buildFuture(Future<Global> object) {
 
 Widget returnChart({confirmed, deaths, recovered}) {
   
-  PieChartSectionData total = PieChartSectionData(value: confirmed.toDouble(), color: Colors.red, title: 'Confirmed Cases', titleStyle: TextStyle(fontFamily: 'Muli'), radius: 60);
-  PieChartSectionData deathRate = PieChartSectionData(value: deaths.toDouble(), color: Colors.black, title: 'Deaths', titleStyle: TextStyle(fontFamily: 'Muli'), radius: 60);
-  PieChartSectionData recoveredPeople = PieChartSectionData(value: recovered.toDouble(), color: Colors.yellow, title: 'Recovered', titleStyle: TextStyle(fontFamily: 'Muli'), radius: 60);
+  PieChartSectionData total = PieChartSectionData(value: confirmed.toDouble(), color: Colors.red, title: 'Confirmed Cases', titleStyle: TextStyle(fontFamily: 'Muli', color: Colors.black, fontSize: 20), radius: 60);
+  PieChartSectionData deathRate = PieChartSectionData(value: deaths.toDouble(), color: Colors.black, title: 'Deaths', titleStyle: TextStyle(fontFamily: 'Muli', fontSize: 20, color: Colors.blue), radius: 60);
+  PieChartSectionData recoveredPeople = PieChartSectionData(value: recovered.toDouble(), color: Colors.yellow, title: 'Recovered', titleStyle: TextStyle(fontFamily: 'Muli', color: Colors.black, fontSize: 20), radius: 60);
 
 
   return PieChart(
@@ -80,7 +80,11 @@ Widget returnChart({confirmed, deaths, recovered}) {
         deathRate,
         recoveredPeople,
       ], 
-      centerSpaceRadius: 70.0
+      centerSpaceRadius: 70.0,
+      startDegreeOffset: 180,
+      borderData: FlBorderData(
+        show: false
+      ),
     )
   );
 }
