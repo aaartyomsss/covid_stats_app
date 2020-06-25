@@ -15,7 +15,7 @@ class ByCountry extends StatefulWidget {
 class _ByCountryState extends State<ByCountry> {
   String url = 'https://api.covid19api.com/live/country/';
   String userInput;
-  
+  TextEditingController controller;
 
   Future<List<ByCountryModel>> getData() async {
     var response = await http.get(url + userInput);
@@ -33,6 +33,12 @@ class _ByCountryState extends State<ByCountry> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initStated
+    controller = TextEditingController();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (userInput == null) {
       return buildBodyNull();
@@ -42,27 +48,16 @@ class _ByCountryState extends State<ByCountry> {
   }
 
   Widget buildBodyNull() {
-    return TextFormField(
-      onFieldSubmitted: (String value) {
-        setState(() {
-          userInput = value.toLowerCase().replaceAllMapped(" ", (match) => "-");
-        });
-      },
-    );
+    return customRow();
   }
 
   Widget buildBody() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Expanded(
           flex: 1,
-          child: TextFormField(
-            onFieldSubmitted: (String value) {
-              setState(() {
-                userInput = value.toLowerCase();
-              });
-            },
-          ),
+          child: customRow(),
         ),
         FutureBuilder(
             future: getData(),
@@ -87,7 +82,7 @@ class _ByCountryState extends State<ByCountry> {
               } else if (data.hasError) {
                 return Center(child: Text('Unable to receive data. Please check spelling of a country'));
               }
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             }),
       ],
     );
@@ -119,6 +114,42 @@ class _ByCountryState extends State<ByCountry> {
 
         ],
       )
+    );
+  }
+
+  Widget customInputField() {
+    return TextField(
+      controller: controller,
+      onSubmitted: (String value) {
+        setState(() {
+          userInput = value.toLowerCase().replaceAllMapped(" ", (match) => "-");
+          controller.clear();
+        });
+      },
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        hintText: 'Enter country name',
+      ),
+    );
+  }
+
+  Widget refreshButton() {
+    return FlatButton(
+      onPressed: () {
+        setState(() {
+        userInput = null;
+      });
+      }, 
+      child: Icon(Icons.refresh),
+      );
+  }
+
+  Row customRow() {
+    return Row(
+      children: [
+        refreshButton(),
+        Expanded(child: customInputField()),
+      ]
     );
   }
 

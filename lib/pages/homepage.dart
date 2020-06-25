@@ -61,7 +61,7 @@ Widget buildFuture(Future<Global> object) {
             } else if (data.hasError){
               return Text('${data.error}');
             }
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           },
         );
 }
